@@ -93,9 +93,15 @@ class Tank {
     left;
     controller = null;
 
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor(canvas) {
+        var context = canvas.getContext('2d');
+        this.ctx = context;
+        this.width = canvas.width;
+        this.height = canvas.height;
+        var cX = canvas.width / 2;
+        var cY = canvas.height - 30;
+        this.x = cX;
+        this.y = cY;
         this.size = 5;
         this.controller = new Controller();
 
@@ -103,24 +109,24 @@ class Tank {
         window.addEventListener('keyup', this.controller.keyUp.bind(this.controller), false);
     }
 
-    draw(ctx, width, height) {
+    draw() {
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-        ctx.closePath();
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
+        this.ctx.fillStyle = 'blue';
+        this.ctx.fill();
+        this.ctx.closePath();
 
-        this.update(width, height);
+        this.update();
     }    
 
-    update(width, height) {
+    update() {
 
         console.log("update");
 
         if (this.controller.isRight()) {
 
-            if (this.x + this.dx > width - this.size) {
+            if (this.x + this.dx > this.width - this.size) {
 
             }
             else {
@@ -149,7 +155,7 @@ class Tank {
 
         if (this.controller.isDown()) {
             
-            if (this.y + this.dy > height - this.size) {
+            if (this.y + this.dy > this.height - this.size) {
 
             }
             else {
@@ -164,12 +170,9 @@ window.onload = () => {
     console.log("window loaded");
 
     var canvas = document.getElementById('arena');
-   
-    var cX = canvas.width / 2;
-    var cY = canvas.height - 30;
 
     const arena = new Arena(canvas);
-    const tank = new Tank(cX, cY);
+    const tank = new Tank(canvas);
 
     arena.add(tank);
     arena.draw();
